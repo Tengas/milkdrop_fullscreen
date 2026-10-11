@@ -546,15 +546,10 @@ jobs:
         run: |
           rm dist/TauonMusicBox/_internal/portable
 
-      - name: Replace Tauon version in .ISS
+      - name: Replace placeholders in .ISS
         run: |
           sed -i "s|{{ tauon_version }}|${{ steps.version.outputs.version }}|g" extra/setup.iss
-
-      - name: Get current drive letter nad replace what's in .ISS
-        shell: pwsh
-        run: |
-          $Drive = (Get-Item -Path "${{ github.workspace }}").PSDrive.Name + ":\"
-          (Get-Content extra/setup.iss) -replace "C:\\", $Drive | Set-Content extra/setup.iss
+          sed -i "s|{{ workspace }}|${{ github.workspace }}|g" extra/setup.iss
 
       - name: Compile .ISS to .EXE Installer
         uses: C0rn3j/Inno-Setup-Action@v1.2.9
